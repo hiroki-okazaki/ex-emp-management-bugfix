@@ -1,5 +1,6 @@
 package jp.co.sample.emp_management.form;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -11,14 +12,15 @@ import javax.validation.constraints.Size;
  */
 public class InsertAdministratorForm {
 	/** 名前 */
-	@NotBlank
-	@Size(max=16)
+	@NotBlank(message = "名前は必須です")
+	@Size(max=16,message = "名前は16文字以上で記載してください")
 	private String name;
 	/** メールアドレス */
-	@NotBlank
+	@NotBlank(message = "メールアドレスは必須です")
+	@Email(message = "Eメールの形式が不正です")
 	private String mailAddress;
 	/** パスワード */
-	@NotBlank
+	@NotBlank(message = "パスワードは必須です")
 	private String password;
 	public String getName() {
 		return name;
