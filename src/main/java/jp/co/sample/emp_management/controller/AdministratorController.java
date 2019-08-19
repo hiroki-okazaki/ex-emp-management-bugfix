@@ -71,20 +71,35 @@ public class AdministratorController {
 	 * @return ログイン画面へリダイレクト
 	 */
 	@RequestMapping("/insert")
-	public String insert(@Validated InsertAdministratorForm form,BindingResult result) {
+	public String insert(@Validated InsertAdministratorForm form,BindingResult result,Model model) {
 		if(result.hasErrors()) {
 			
 			return "administrator/insert";
 		}
+		
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
-		administratorService.insert(administrator);
+		Administrator checkAddress = administratorService.findByMailAddress(administrator.getMailAddress());
 		
-
-		return "redirect:/";
+		if(checkAddress == null) {
+			administratorService.insert(administrator);
+			return "administrator/login";
+		}else {
+			model.addAttribute("error","※このメールアドレスは既に使われています");
+			return "administrator/insert";
+		}
 	}
-
+//	    ↓try catch文ではデータベースに重複するメールアドレスがあるか確認しない状態で
+//	    insert文を実行しようとしている為、実務仕様には向いていない
+//		try{
+//			administratorService.insert(administrator);
+//			return "redirect:/";
+//		}catch(DuplicateKeyException e) {
+//			
+//			return "administrator/insert";
+//		}
+		
 	/////////////////////////////////////////////////////
 	// ユースケース：ログインをする
 	/////////////////////////////////////////////////////
