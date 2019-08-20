@@ -55,6 +55,11 @@
 			<li class="active"><a href="list.html" th:href="@{/employee/showList}">従業員リスト</a></li>
 		</ol>
 
+		<form method="post" action="login.html" th:action="@{/employee/serch}">
+		<input type="text" name="name">
+		<button>検索</button>
+		</form>
+		
 		<!-- table -->
 		<div class="row">
 			<div

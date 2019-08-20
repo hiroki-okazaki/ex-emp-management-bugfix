@@ -52,6 +52,13 @@ public class EmployeeController {
 		model.addAttribute("employeeList", employeeList);
 		return "employee/list";
 	}
+	
+	@RequestMapping("/serch")
+	public String serch(Model model,String name) {
+		List<Employee> employeeList = employeeService.findByLikeName(name);
+		model.addAttribute("employeeList", employeeList);
+		return "employee/list";
+	}
 
 	
 	/////////////////////////////////////////////////////
