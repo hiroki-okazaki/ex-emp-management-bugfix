@@ -76,11 +76,9 @@ public class AdministratorController {
 			
 			return "administrator/insert";
 		}
-		System.out.println(form.getPassword());
-		System.out.println(confirmPassword);
 		
-	    if(form.getPassword() != confirmPassword) {
-		model.addAttribute("passwordError","※パスワードの入力が正しくありません");
+	    if(!form.getPassword().equals(confirmPassword)) {
+	    result.rejectValue("password",null,"パスワードが一致しません");
 		return "administrator/insert";
 	    }
 		
@@ -93,7 +91,7 @@ public class AdministratorController {
 			administratorService.insert(administrator);
 			return "administrator/login";
 		}else {
-			model.addAttribute("error","※このメールアドレスは既に使われています");
+			result.rejectValue("password",null,"※このメールアドレスは既に使われています");
 			return "administrator/insert";
 		}
 	}

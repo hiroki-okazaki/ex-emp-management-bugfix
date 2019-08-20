@@ -56,7 +56,6 @@
 										<label for="mailAddress">
 											メールアドレス:
 										</label>
-										<span th:text="${error}" class="error-messages">このメールアドレスは既に使われています</span>
 										<label th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}" class="error-messages">
 											メールアドレスを入力してください
 										</label>
@@ -72,7 +71,6 @@
 										<label for="passwaord">
 											パスワード:
 										</label>
-										<span th:text="${passwordError}" class="error-messages">パスワードの入力が正しくありません</span>
 										<label th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-messages">
 											パスワードを入力してください
 										</label>
@@ -86,7 +84,7 @@
 								<div class="row">
 									<div class="col-sm-12">
 										<label for="confirmPasswaord">
-										　　　パスワード再入力:
+										パスワード再入力:
 										</label>
 										<input type="password" name="confirmPassword" id="password" class="form-control" placeholder="confirmPassword"
 											   th:errorclass="error-input" value="xxxxxxxx">
