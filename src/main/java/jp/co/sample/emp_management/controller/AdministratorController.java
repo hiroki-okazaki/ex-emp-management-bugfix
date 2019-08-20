@@ -72,27 +72,24 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form,BindingResult result,Model model,String confirmPassword) {
-		if(result.hasErrors()) {
-			
-			return "administrator/insert";
-		}
-		
+//		if(result.hasErrors()) {
+//			return "administrator/insert";
+//		}
 	    if(!form.getPassword().equals(confirmPassword)) {
 	    result.rejectValue("password",null,"パスワードが一致しません");
-		return "administrator/insert";
 	    }
 		
-		Administrator administrator = new Administrator();
-		// フォームからドメインにプロパティ値をコピー
-		BeanUtils.copyProperties(form, administrator);
-		Administrator checkAddress = administratorService.findByMailAddress(administrator.getMailAddress());
+		Administrator checkAddress = administratorService.findByMailAddress(form.getMailAddress());
 			
-		if(checkAddress == null) {
+		if(checkAddress != null) {
+			result.rejectValue("mailAddress",null,"※このメールアドレスは既に使われています");
+			return "administrator/insert";
+			
+		}else {
+			Administrator administrator = new Administrator();
+			BeanUtils.copyProperties(form, administrator);
 			administratorService.insert(administrator);
 			return "administrator/login";
-		}else {
-			result.rejectValue("password",null,"※このメールアドレスは既に使われています");
-			return "administrator/insert";
 		}
 	}
 //	    ↓try catch文ではデータベースに重複するメールアドレスがあるか確認しない状態で
