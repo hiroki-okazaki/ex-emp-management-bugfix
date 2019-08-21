@@ -4,6 +4,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +27,8 @@ import jp.co.sample.emp_management.service.AdministratorService;
 @Controller
 @RequestMapping("/")
 public class AdministratorController {
+	
+	PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@Autowired
 	private AdministratorService administratorService;
@@ -86,8 +90,10 @@ public class AdministratorController {
 		if (result.hasErrors()) {
 			return "administrator/insert";
 		}
-
 		Administrator administrator = new Administrator();
+		
+		String hashPassword = passwordEncoder.encode(form.getPassword());
+		form.setPassword(hashPassword);
 		BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator);
 		return "administrator/login";
@@ -126,15 +132,22 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/login")
 	public String login(LoginForm form, BindingResult result, Model model) {
-		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
+		Administrator administrator = administratorService.login(form.getMailAddress());
+		
+
 		if (administrator == null) {
 			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return toLogin();
 		}
-		session.setAttribute("administratorName",administrator.getName());
+		boolean existPassword = passwordEncoder.matches(form.getPassword(), administrator.getPassword());
+		if(!existPassword) {
+			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
+			return toLogin();
+		}
+		
+		session.setAttribute("administratorName", administrator.getName());
 		return "forward:/employee/showList";
 	}
-	
 	/////////////////////////////////////////////////////
 	// ユースケース：ログアウトをする
 	/////////////////////////////////////////////////////
