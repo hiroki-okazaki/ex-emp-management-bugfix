@@ -55,6 +55,7 @@
 			<li class="active"><a href="list.html" th:href="@{/employee/showList}">従業員リスト</a></li>
 		</ol>
 
+		<span th:text="${serchError}">検索エラー</span>
 		<form method="post" action="login.html" th:action="@{/employee/serch}">
 		<input type="text" name="name">
 		<button>検索</button>
@@ -94,8 +95,7 @@
 						</tr>
 					</tbody>
 				</table>
-
-
+				
 <!-- ここから下を編集する必要はありません -->
 
 			</div>

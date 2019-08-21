@@ -22,6 +22,8 @@ public class EmployeeService {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	
+//	@Autowired
+//	private NoticeInfoRepository noticeInfoRepository;
 	/**
 	 * 従業員情報を全件取得します.
 	 * 
@@ -32,6 +34,9 @@ public class EmployeeService {
 		return employeeList;
 	}
 	
+//	 public Page<Employee> findAll(Pageable pageable){
+//		return findAll(pageable);
+//	 }
 	/**
 	 * 従業員情報を取得します.
 	 * 

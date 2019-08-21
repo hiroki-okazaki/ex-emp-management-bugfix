@@ -56,10 +56,20 @@ public class EmployeeController {
 	@RequestMapping("/serch")
 	public String serch(Model model,String name) {
 		List<Employee> employeeList = employeeService.findByLikeName(name);
+		
+		if(employeeList.size() == 0) {
+			model.addAttribute("serchError", "１件も該当がありませんでした");
+			return showList(model);
+		}
 		model.addAttribute("employeeList", employeeList);
 		return "employee/list";
 	}
-
+	
+//	@RequestMapping("/list")
+//    Page<Employee> getEmployee(Pageable pageable){
+//		Page<Employee> employee = employeeService.findAll(pageable);
+//		return employee;
+//	}
 	
 	/////////////////////////////////////////////////////
 	// ユースケース：従業員詳細を表示する
